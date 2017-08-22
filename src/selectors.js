@@ -90,12 +90,25 @@ const computeOptionsImpl = (optionsName) => {
     // if it is navigator then continue recursively
     if (component.router) {
       const navigator = component
-      const route = navigationState.routes[ navigationState.index ]
+      let route = navigationState.routes[ navigationState.index ]
       const nextComponent = navigator.router.getComponentForRouteName(route.routeName)
-      const nextConfig = typeof navigator.pluginGetConfigForRouteName === 'function'
-        ? navigator.pluginGetConfigForRouteName(route.routeName)
-        : null
-
+      let nextConfig = null
+      if (typeof navigator.pluginGetConfigForRouteName === 'function') {
+        nextConfig = navigator.pluginGetConfigForRouteName(route.routeName)
+        // this should not really happen unless navigator has added its own
+        // layer of routes (like DrawerNavigator), in which case we can transfer
+        // pluginGetConfigForRouteName to underlying navigator
+        // (since we know how it is implemented which is bad tight coupling :( )
+        if (!nextConfig && nextComponent.router) {
+          nextComponent.pluginGetConfigForRouteName = navigator.pluginGetConfigForRouteName
+        }
+        // However this still won't work with drawer open, but often it is not needed.
+        // If you need it when drawer is open you should probaly override
+        // pluginGetConfigForRouteName defined on DrawerNavigator,
+        // to return something specialized when drawer is open.
+        // I don't like this drawer, it is not elegant, nor beatuful, nor does it fit nicely
+        // into philosophy that other navigators seem to share.
+      }
       return implFunc(route, nextComponent, nextConfig, options)
     } else {
       // it is React component, params have higher priority config, if it exists
