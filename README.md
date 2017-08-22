@@ -15,7 +15,8 @@ _NOTE: There are a lot of comments in code, so feel free to browse code in order
 
 **Example: Handling status bar configuration with navigation**
 
-You probably already have most of these files.
+You probably already have most of these files and adding status bar handling is probably just a couple of lines of code, but here is more code for completeness and better understanding.
+**If you already have your reducer it is not needed for statusBarOptions to work.**
 If not, maybe this could help you configure react-navigation with redux.
 
 _RootStackNavigator.js_
@@ -36,6 +37,7 @@ export default RootStackNavigator = createNavigatorWithPlugins(StackNavigator,
     Main: {
       screen: MainTabNavigator, // Nested navigators work great
       statusBarOptions: { hidden: false }
+    },
     Login: { screen: Login },
     Welcome: { screen: Welcome }
   },
@@ -65,6 +67,8 @@ class SomeScreen extends React.Component {
 }
 ...
 ```
+**If you already have your reducer it is not needed for statusBarOptions to work.
+You only need this reducer if you want custom navigation actions, or easy setup.**
 
 _navigationReducer.js_
 ```js
