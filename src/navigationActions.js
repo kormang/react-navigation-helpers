@@ -10,13 +10,13 @@ import { NavigationActions } from 'react-navigation'
  make specialized function without need to create wrapper.
  Provided additionalActions can not be CustomNavigationActions.
  */
-const resetToNestedScreen = (rootRouteName) => (nestedRouteName, additionalActions = []) => ({
+const resetToNestedScreen = (rootRouteName) => (nestedRouteName, params, additionalActions = []) => ({
   type: customNavigationActionTypes.NESTED_RESET,
   payload: {
     index: 0,
     key: null,
     actions: [ NavigationActions.navigate({ routeName: rootRouteName }) ],
-    toNestedAction: NavigationActions.navigate({ routeName: nestedRouteName }),
+    toNestedAction: NavigationActions.navigate({ routeName: nestedRouteName, params }),
     additionalActions
   }
 })
@@ -81,11 +81,11 @@ export const CustomNavigationActions = {
  Action creator for most common reset action.
  Sets index to 0, and key to null. Resets to screenName (which must be part of root navigator).
  */
-const resetToRootScreen = (screenName) =>
+const resetToRootScreen = (screenName, params) =>
   NavigationActions.reset({
     index: 0,
     key: null,
-    actions: [ NavigationActions.navigate({ routeName: screenName }) ]
+    actions: [ NavigationActions.navigate({ routeName: screenName, params }) ]
   })
 
 /*
