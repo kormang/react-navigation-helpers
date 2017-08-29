@@ -115,7 +115,7 @@ import RootStackNavigator from './RootStackNavigator'
 import StatusBarHandler from './StatusBarHandler'
 import { computeOptions, findCurrentRoute, findCurrentRouteName } from 'react-navigation-helpers'
 ...
-const navigationSelector = state => state.navigationReducer
+const navigationSelector = state => state.navigation
 // THIS IS IMPORTANT:
 const getStatusBarOptions =
   computeOptions(navigationSelector)(RootStackNavigator)('statusBarOptions')
