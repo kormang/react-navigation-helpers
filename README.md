@@ -293,4 +293,42 @@ const RootStackNavigator = createNavigatorWithPlugins(StackNavigator,
 
 ```
 
+## Other Helpers
+If you want to open some screen to get some result, for example some dialog where user selects one of the options, then navigateForResult is what you need.
+
+Let's say you want to open dialog screen from another screen, then you would usually do something like this:
+```js
+import { navigateForResult } from 'react-navigation-helpers'
+.
+.
+.
+ try {
+   const result = await navigateForResult(this.props.navigation, 'DialogScreen', {someOptionalParams}, someOptionalAction)
+   console.log('User have choosed: ', result)
+ } catch (err) {
+   ...
+ }
+
+```
+
+If you are calling this from action creators, where you don't have `this.props.navigation`,
+you can use `dispatch` function.
+```js
+   const result = await navigateForResult(dispatch, 'DialogScreen', {someOptionalParams}, someOptionalAction)
+```
+
+In your DialogScreen when you want to return result to caller do this:
+```js
+   this.props.navigation.state.params.onResultSuccess(result)
+```
+
+If you want to throw exception in caller's code, do this:
+```js
+   this.props.navigation.state.params.onResultFailure(error)
+```
+
+For detailed documentation and explanation check `helpers.js` file.
+Principle of work is really simple, it takes more to explain it,
+then to understand it just by taking look at those few lines of code.
+
 **Definitely check out `selectors.js` and `helpers.js` for more details.**
