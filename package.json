@@ -19,7 +19,9 @@
     "react-navigation": "^1.0.0-beta.11"
   },
   "dependencies": {
-    "reselect": "^3.0.1",
-    "redux-define": "^1.1.1"
+    "lodash": "^4.17.5",
+    "react-navigation-redux-helpers": "^1.0.5",
+    "redux-define": "^1.1.1",
+    "reselect": "^3.0.1"
   }
 }

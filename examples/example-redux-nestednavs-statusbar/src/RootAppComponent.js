@@ -5,8 +5,8 @@ import { addNavigationHelpers } from 'react-navigation'
 import RootStackNavigator from './RootStackNavigator'
 import StatusBarHandler from './StatusBarHandler'
 import { computeOptions, findCurrentRoute, findCurrentRouteName } from 'react-navigation-helpers'
+import { navigationSelector, addListener } from './navigation-utils'
 
-const navigationSelector = state => state.navigation
 // THIS IS IMPORTANT:
 const getStatusBarOptions =
   computeOptions(navigationSelector)(RootStackNavigator)('statusBarOptions')
@@ -20,7 +20,8 @@ class AppRoot extends React.Component {
       <StatusBarHandler statusBarOptions={this.props.statusBarOptions}/>
       <RootStackNavigator navigation={addNavigationHelpers({
         dispatch: this.props.dispatch,
-        state: this.props.nav
+        state: this.props.nav,
+        addListener
       })} />
     </View>
   }

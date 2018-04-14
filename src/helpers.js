@@ -1,3 +1,8 @@
+import {
+  createReduxBoundAddListener,
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers'
+import _ from 'lodash'
 
 // Navigates to screen with name routeName, and returns results from that screen via Promise.
 // routeName, params, and action are standard parameters for navigation actions.
@@ -35,3 +40,25 @@ export function navigateForResult (navigationOrDispatch, routeName, params, acti
     }
   })
 }
+
+export const defaultNavSelector = state => state.navigation
+
+// Wrapper around react-navigation-redux-helpers createReactNavigationReduxMiddleware,
+// and createReduxBoundAddListener.
+// Accepts same parameters as createReactNavigationReduxMiddleware, but provides default values.
+// IMPORTANT: This function will memoize based on first parameter, so if you call it twice
+// it will return same object, thus it insures easy way to properly create these results
+// from two different files. It makes things easier if you use default values. If you don't
+// then you'll need to create file where you can create these helpers and then export them further.
+// Returns `{navigationMiddleware, addListener}`.
+export const createReactNavigationReduxHelpers = _.memoize(
+  function (reduxSubscriberKey = 'root', navStateSelector = defaultNavSelector) {
+    // Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
+    const navigationMiddleware = createReactNavigationReduxMiddleware(reduxSubscriberKey, navStateSelector)
+    const addListener = createReduxBoundAddListener(reduxSubscriberKey)
+    return {
+      navigationMiddleware,
+      addListener
+    }
+  }
+)

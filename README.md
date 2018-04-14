@@ -113,9 +113,17 @@ _RootAppComponent.js_
 ...
 import RootStackNavigator from './RootStackNavigator'
 import StatusBarHandler from './StatusBarHandler'
-import { computeOptions, findCurrentRoute, findCurrentRouteName } from 'react-navigation-helpers'
+import {
+  computeOptions,
+  findCurrentRoute,
+  findCurrentRouteName,
+  createReactNavigationReduxHelpers,
+  defaultNavSelector as navigationSelector
+} from 'react-navigation-helpers'
 ...
-const navigationSelector = state => state.navigation
+
+const {addListener} = createReactNavigationReduxHelpers()
+
 // THIS IS IMPORTANT:
 const getStatusBarOptions =
   computeOptions(navigationSelector)(RootStackNavigator)('statusBarOptions')
@@ -130,7 +138,8 @@ class RootAppComponent extends React.Component {
       <StatusBarHandler statusBarOptions={this.props.statusBarOptions}/>
       <RootStackNavigator navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
-          state: this.props.nav
+          state: this.props.nav,
+          addListener
         })} />
     </View>
   }
@@ -181,6 +190,26 @@ const { navigationReducer } = createNavigationReducer('Home', RootStackNavigator
 // And that is it, you have navigation reducer, just combine it with other reducers and use it.
 // All that is does is navigation, the only thing navigation reducer should be doing.
 export default navigationReducer
+```
+
+While creating store:
+```js
+import { createReactNavigationReduxHelpers } from 'react-navigation-helpers'
+...
+
+const {navigationMiddleware} = createReactNavigationReduxHelpers()
+
+const rootReducer = {
+  ...
+  navigation: navigationReducer, // navigation reducer we've created in previous step
+  ...
+}
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(navigationMiddleware)
+);
+
 ```
 
 ## Additional custom actions
