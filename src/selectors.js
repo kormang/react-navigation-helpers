@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect'
 
+export const defaultNavigationSelector = state => state.navigation
+
 const findCurrentRouteImpl = (navigationState) => {
   if (!navigationState) {
     return null
@@ -20,6 +22,8 @@ const findCurrentRouteImpl = (navigationState) => {
 export const findCurrentRoute = (navigationSelector) =>
   createSelector([navigationSelector], findCurrentRouteImpl)
 
+export const findCurrentRouteWithDefaultSelector = findCurrentRoute(defaultNavigationSelector)
+
 /*
  Memoized selector for current route name.
  It requires `currentRouteSelector` which can be obtained using `findCurrentRoute` function.
@@ -29,6 +33,8 @@ export const findCurrentRoute = (navigationSelector) =>
 export const findCurrentRouteName = (currentRouteSelector) =>
   createSelector([currentRouteSelector],
     (currentRoute) => currentRoute ? currentRoute.routeName : currentRoute)
+
+export const findCurrentRouteNameWithDefaultSelector = findCurrentRouteName(findCurrentRouteWithDefaultSelector)
 
 const findCurrentComponentImpl = (navigationState, navigator) => {
   if (!navigationState) {
@@ -49,6 +55,8 @@ const findCurrentComponentImpl = (navigationState, navigator) => {
  */
 export const findCurrentComponent = (navigationSelector) => (navigator) => createSelector(
   [navigationSelector], (navState) => findCurrentComponentImpl(navState, navigator))
+
+export const findCurrentComponentWithDefaultSelector = findCurrentComponent(defaultNavigationSelector)
 
 // ///////////////////////////
 // Details of implementation:
