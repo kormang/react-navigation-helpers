@@ -2,6 +2,7 @@ import {
   createReduxBoundAddListener,
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers'
+import { NavigationActionHelpers } from './navigationActions'
 import _ from 'lodash'
 
 // Navigates to screen with name routeName, and returns results from that screen via Promise.
